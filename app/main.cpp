@@ -16,9 +16,10 @@ int main(int argc, char** argv) {
     Logger::set_log_level(Logger::LogLevel::WARNING);
   } else if (args.debug) {
     Logger::set_log_level(Logger::LogLevel::DEBUG);
-  }
+  } 
 
-  auto auts_encoded = IO::read_automata(args.input_path);
+  // HERE: we generate the automata using algo!
+  auto auts_encoded = IO::generate_automata(5,2);
   auto config = IO::read_config(args.config_path);
 
   size_t skip = 0;
