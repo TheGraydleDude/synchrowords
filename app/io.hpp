@@ -10,6 +10,8 @@
 #include <sstream>
 #include <string>
 
+  int min_max = 0;
+  int max_max = 0;
 
 class IO {
 public:
@@ -55,7 +57,7 @@ public:
 /// Returns a vector<EncodedAutomaton>.
  static std::vector<EncodedAutomaton> generate_automata(uint n, uint k)
 {
-  if (n == 0 || k == 0) {
+  if (n <= 0 || k <= 0) {
     Logger::error() << "n and k must be > 0";
     std::exit(3);
   }
@@ -108,7 +110,6 @@ public:
     // if first state, make it a sink state (all transitions to 0)
     if (state_idx == 0) {
       for (uint s = 0; s < k; ++s) transitions[0][s] = 0;
-      // Python used seen+1 here
       rec(1, 0, seen + 1);
       return;
     } else {
@@ -138,7 +139,6 @@ public:
         rec(state_idx, sym_idx + 1, new_seen);
       }
 
-      // reset as Python does (None / -1)
       transitions[state_idx][sym_idx] = -1;
     }
   };
@@ -171,6 +171,12 @@ public:
     return ret;
   }
 
+  static void print_result() {
+    *output << "[" << min_max << ", " << max_max << "]";
+    Logger::info() << "done";
+    output->flush();
+  }
+
   static void push_result(const AlgoResult& result, size_t index) {
     if (!output) {
       if (result.word) {
@@ -181,7 +187,7 @@ public:
       return;
     }
 
-    *output << index << ": ";
+    // *output << index << ": ";
 
     if (result.non_synchro) {
       *output << "NON SYNCHRO\n";
@@ -189,36 +195,44 @@ public:
       return;
     }
 
-    *output << "[" << result.mlsw_lower_bound << ", "
-            << result.mlsw_upper_bound << "]";
-
-    *output << " (";
-    bool first = true;
-    for (const auto& [name, time] : result.algorithms_run) {
-      if (!first) {
-        *output << ", ";
-      }
-      *output << "(" << name << ", " << time << ")";
-      first = false;
-    }
-    *output << ")";
-
-    if (result.word) {
-      Logger::info() << "Saving synchronizing word of length "
-                      << result.word->size();
-
-      *output << " {";
-      for (size_t i = 0; i < result.word->size(); ++i) {
-        if (i != 0) {
-          *output << " ";
-        }
-        *output << (*result.word)[i];
-      }
-      *output << "}";
+    if (result.mlsw_lower_bound > min_max){
+      min_max = result.mlsw_lower_bound;
     }
 
-    *output << "\n";
-    output->flush();
+    if (result.mlsw_upper_bound > max_max){
+      max_max = result.mlsw_upper_bound;
+    }
+
+    // *output << "[" << result.mlsw_lower_bound << ", "
+    //         << result.mlsw_upper_bound << "]";
+
+    // *output << " (";
+    // bool first = true;
+    // for (const auto& [name, time] : result.algorithms_run) {
+    //   if (!first) {
+    //     *output << ", ";
+    //   }
+    //   *output << "(" << name << ", " << time << ")";
+    //   first = false;
+    // }
+    // *output << ")";
+
+    // if (result.word) {
+      // Logger::info() << "Saving synchronizing word of length "
+      //                 << result.word->size();
+
+      // *output << " {";
+      // for (size_t i = 0; i < result.word->size(); ++i) {
+      //   if (i != 0) {
+      //     *output << " ";
+      //   }
+      //   *output << (*result.word)[i];
+      // }
+      // *output << "}";
+    // }
+
+    // *output << "\n";
+    // output->flush();
   }
 
 private:

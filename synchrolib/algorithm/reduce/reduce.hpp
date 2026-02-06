@@ -66,7 +66,7 @@ public:
     }
 
     if (found) {
-      Logger::info() << "mlsw: " << mlsw;
+      // Logger::info() << "mlsw: " << mlsw;
       assert(data.result.mlsw_lower_bound <= mlsw && mlsw <= data.result.mlsw_upper_bound);
       data.result.mlsw_lower_bound = data.result.mlsw_upper_bound = mlsw;
       return;

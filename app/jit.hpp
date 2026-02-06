@@ -34,7 +34,7 @@ public:
 
         JitLib jitlib;
         if (std::filesystem::is_directory(libroot)) {
-          Logger::info() << "Loading precompiled library";
+          // Logger::info() << "Loading precompiled library";
           jitlib.set_dir_path(libroot);
           jitlib.load("libsynchro.so");
         } else {

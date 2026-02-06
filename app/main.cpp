@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
   } 
 
   // HERE: we generate the automata using algo!
-  auto auts_encoded = IO::generate_automata(5,2);
+  auto auts_encoded = IO::generate_automata(8,2);
   auto config = IO::read_config(args.config_path);
 
   size_t skip = 0;
@@ -71,12 +71,13 @@ int main(int argc, char** argv) {
     if (result.non_synchro) {
       Logger::info() << "NON SYNCHRO";
     } else {
-      Logger::info() << "Minimum synchronizing word length: ["
-                      << result.mlsw_lower_bound << ", "
-                      << result.mlsw_upper_bound << "]";
+      // Logger::info() << "Minimum synchronizing word length: ["
+      //                 << result.mlsw_lower_bound << ", "
+      //                 << result.mlsw_upper_bound << "]";
     }
     IO::push_result(result, index++);
   }
+  IO::print_result();
 
   return 0;
 }

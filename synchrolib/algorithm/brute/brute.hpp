@@ -68,7 +68,7 @@ public:
     assert(*mlsw >= data.result.mlsw_lower_bound);
 
     data.result.mlsw_upper_bound = data.result.mlsw_lower_bound = *mlsw;
-    Logger::info() << "mlsw: " << *mlsw;
+    // Logger::info() << "mlsw: " << *mlsw;
   }
 
 private:

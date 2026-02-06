@@ -47,7 +47,7 @@ void Exact<N, K>::run(AlgoData<N, K>& data) {
   }
 
   if (N == 1) {
-    Logger::info() << "mlsw: " << 0;
+    // Logger::info() << "mlsw: " << 0;
     data.result.mlsw_upper_bound = data.result.mlsw_lower_bound = 0;
     return;
   }
@@ -91,7 +91,7 @@ void Exact<N, K>::run(AlgoData<N, K>& data) {
     data.result.mlsw_upper_bound = reset_threshold;
   }
 
-  Logger::info() << (found ? "mlsw: " : "mlsw >= ") << reset_threshold;
+  // Logger::info() << (found ? "mlsw: " : "mlsw >= ") << reset_threshold;
 
   assert(data.result.mlsw_lower_bound <= data.result.mlsw_upper_bound);
 }
