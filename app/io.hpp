@@ -53,12 +53,13 @@ public:
     }
   };
 
-  /// Generate canonical DFAs (BFS-canonical) with n states and alphabet size k.
-/// Returns a vector<EncodedAutomaton>.
- static std::vector<EncodedAutomaton> generate_automata(uint n, uint k)
+
+  // input n gives us mortality threshold for n-1
+ static std::vector<EncodedAutomaton> generate_binary_automata(uint n)
 {
-  if (n <= 0 || k <= 0) {
-    Logger::error() << "n and k must be > 0";
+  uint k = 2;
+  if (n <= 0) {
+    Logger::error() << "n must be > 0";
     std::exit(3);
   }
 
@@ -87,12 +88,12 @@ public:
     a.N = n;
     a.K = k;
     a.str = serialize_current();
-    a.validate(); // will exit(3) on error like your original code
+    a.validate();
     result.push_back(std::move(a));
     ++counter;
   };
 
-  // recursive generator: set_state_symbol_rec(state_idx, sym_idx, seen)
+  // recursive generator
   std::function<void(uint, uint, uint)> rec;
   rec = [&](uint state_idx, uint sym_idx, uint seen) -> void {
     // finished all states
@@ -125,6 +126,9 @@ public:
 
       // max target is either the next unseen state (seen) or n-1
       uint max_new_target = std::min(seen, n - 1u);
+      // 0 0
+      // 0 1
+      // 0 1
 
       // if there's no downward transition yet and this is the last symbol, force downward max
       if (!has_trans_going_down && sym_idx == k - 1) {
@@ -172,8 +176,8 @@ public:
   }
 
   static void print_result() {
-    *output << "[" << min_max << ", " << max_max << "]";
-    Logger::info() << "done";
+    // *output << "[" << min_max << ", " << max_max << "]";
+    Logger::info() << "[" << min_max << ", " << max_max << "]";
     output->flush();
   }
 
